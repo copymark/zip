@@ -150,6 +150,17 @@ func FileInfoHeader(fi os.FileInfo) (*FileHeader, error) {
 	return fh, nil
 }
 
+func EncryptedFileInfoHeader(fi os.FileInfo, password string) (*FileHeader, error) {
+	fh, err := FileInfoHeader(fi)
+	if err != nil {
+		return nil, err
+	}
+	fh.Method = Deflate
+	fh.setEncryptionMethod(StandardEncryption)
+	fh.SetPassword(password)
+	return fh, nil
+}
+
 type directoryEnd struct {
 	diskNbr            uint32 // unused
 	dirDiskNbr         uint32 // unused
